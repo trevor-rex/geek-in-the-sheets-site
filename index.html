@@ -1,100 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Geek in the Sheets</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geek in the Sheets</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #1a1a1a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
 
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 2rem;
-      flex: 1;
-    }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        flex: 1;
+      }
 
-    .logo {
-      width: 220px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
+      .logo {
+        width: 220px;
+        height: auto;
+        margin-bottom: 1.5rem;
+      }
 
-    h1 {
-      font-size: 2.5rem;
-      color: #2e7d32;
-      margin-bottom: 1rem;
-      letter-spacing: -0.5px;
-    }
+      h1 {
+        font-size: 2.5rem;
+        color: #2e7d32;
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+      }
 
-    h1 span {
-      color: #f4b400;
-    }
+      h1 span {
+        color: #f4b400;
+      }
 
-    .tagline {
-      font-size: 1.15rem;
-      color: #444;
-      max-width: 520px;
-      line-height: 1.6;
-    }
+      .tagline {
+        font-size: 1.15rem;
+        color: #444;
+        max-width: 520px;
+        line-height: 1.6;
+      }
 
-    .divider {
-      width: 48px;
-      height: 4px;
-      background-color: #f4b400;
-      border-radius: 2px;
-      margin: 1.5rem auto;
-    }
+      .divider {
+        width: 48px;
+        height: 4px;
+        background-color: #f4b400;
+        border-radius: 2px;
+        margin: 1.5rem auto;
+      }
 
-    footer {
-      width: 100%;
-      padding: 1.25rem 2rem;
-      text-align: center;
-      font-size: 0.8rem;
-      color: #888;
-      border-top: 1px solid #e0e0e0;
-    }
+      .cta-button {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.75rem;
+        background-color: #2e7d32;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+      }
 
-    footer a {
-      color: #2e7d32;
-      text-decoration: none;
-      margin: 0 0.5rem;
-    }
+      .cta-button:hover {
+        background-color: #1b5e20;
+      }
 
-    footer a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <img src="geek_in_the_sheets.png" alt="Geek in the Sheets logo" class="logo">
-    <h1>Geek in the <span>Sheets</span></h1>
-    <div class="divider"></div>
-    <p class="tagline">A Google Workspace Add-on that lets you leverage AI and agentic workflows to interact with your Google Sheets.</p>
-  </main>
+      footer {
+        width: 100%;
+        padding: 1.25rem 2rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #888;
+        border-top: 1px solid #e0e0e0;
+      }
 
-  <footer>
-    <span>&copy; 2025 Rex Labs Inc</span>
-    <a href="/privacy-policy">Privacy Policy</a>
-    <a href="/terms-and-conditions">Terms and Conditions</a>
-  </footer>
-</body>
+      footer a {
+        color: #2e7d32;
+        text-decoration: none;
+        margin: 0 0.5rem;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img
+        src="geek_in_the_sheets.png"
+        alt="Geek in the Sheets logo"
+        class="logo"
+      />
+      <h1>Geek in the <span>Sheets</span></h1>
+      <div class="divider"></div>
+      <p class="tagline">
+        A Google Workspace™ Add-on that lets you leverage AI and agentic
+        workflows to interact with your Google Sheets™.
+      </p>
+      <a
+        href="https://workspace.google.com/marketplace/app/geek_in_the_sheets/372389183907"
+        class="cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Install now</a
+      >
+    </main>
+
+    <footer>
+      <span>&copy; 2025 Rex Labs Inc</span>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms-and-conditions">Terms and Conditions</a>
+    </footer>
+  </body>
 </html>
