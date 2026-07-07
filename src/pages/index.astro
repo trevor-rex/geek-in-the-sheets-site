@@ -1,0 +1,873 @@
+---
+import Base from "../layouts/Base.astro";
+
+const INSTALL_URL =
+  "https://workspace.google.com/marketplace/app/geek_in_the_sheets/372389183907";
+
+const useCases = [
+  "Write a VLOOKUP between two sheets (and have it explained)",
+  "Clean up whitespace and messy text formatting",
+  "Split full names into first and last name columns",
+  "Fix capitalization across a column",
+  "Categorize and tag rows automatically",
+  "Build a category totals table with SUMIF",
+  "Summarize a spreadsheet you didn't build",
+  "Generate sample or placeholder data",
+  "Paste a formula, get a plain-English explanation",
+  "Undo an AI change with one click",
+];
+
+const faq = [
+  {
+    q: "How much does it cost?",
+    a: "Free to install — you get 50 free credits on install, plus 10 trial messages to try your own API key. No card required. If you want more, credit packs are one-time purchases (no subscription): Starter 100 credits $1.99, Popular 300 credits $4.99, Power 1,000 credits $14.99, Max 3,000 credits $39.99. A credit is worth $0.01, and a typical request uses a few credits. Premium (BYOK) is $2.99/month for unlimited use with your own Anthropic API key.",
+  },
+  {
+    q: "What AI model does it use?",
+    a: "Geek in the Sheets is powered by Anthropic’s Claude. The default model is Claude Sonnet. Credit users always use Sonnet. Premium (BYOK) users can choose from Sonnet, Haiku, or Opus.",
+  },
+  {
+    q: "Can it mess up my spreadsheet?",
+    a: "Before every AI change, a snapshot is taken — one-click Undo restores your sheet to before the last change. Honest limits: Undo restores values and formulas (not formatting), covers the most recent change only (single level), works on the first sheet tab, and handles sheets up to 1,000 rows × 50 columns.",
+  },
+  {
+    q: "What can it access?",
+    a: "The add-on uses the spreadsheets.currentonly scope, which means it can only access the spreadsheet it is opened in — it cannot see the rest of your Google Drive™. It also uses your email address for sign-in.",
+  },
+  {
+    q: "Where does my API key go?",
+    a: "Your Anthropic API key is never stored on our servers. It is passed along with each request only.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.a,
+    },
+  })),
+};
+---
+
+<Base
+  title="Geek in the Sheets — AI Assistant for Google Sheets"
+  description="Tell it what you want in plain English — Geek in the Sheets reads and edits your Google Sheets for you. Write formulas, clean messy data, and undo anything with an AI chat sidebar."
+  canonical="https://www.geekinthesheets.app/"
+>
+  <Fragment slot="head">
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Geek in the Sheets" />
+    <meta property="og:url" content="https://www.geekinthesheets.app/" />
+    <meta
+      property="og:title"
+      content="Geek in the Sheets — AI Assistant for Google Sheets"
+    />
+    <meta
+      property="og:description"
+      content="Tell it what you want in plain English — it reads and edits your spreadsheet for you. Formulas, data cleaning, and one-click undo."
+    />
+    <meta
+      property="og:image"
+      content="https://www.geekinthesheets.app/screenshots/01-chat.png"
+    />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="800" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Geek in the Sheets — AI Assistant for Google Sheets"
+    />
+    <meta
+      name="twitter:description"
+      content="Tell it what you want in plain English — it reads and edits your spreadsheet for you. Formulas, data cleaning, and one-click undo."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.geekinthesheets.app/screenshots/01-chat.png"
+    />
+
+    <script type="application/ld+json" is:inline>
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Geek in the Sheets",
+        "description": "An AI assistant for Google Sheets. Tell it what you want in plain English — it reads and edits your spreadsheet for you: writes formulas, cleans messy data, and undoes any change with one click.",
+        "url": "https://www.geekinthesheets.app/",
+        "installUrl": "https://workspace.google.com/marketplace/app/geek_in_the_sheets/372389183907",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "screenshot": [
+          "https://www.geekinthesheets.app/screenshots/01-chat.png",
+          "https://www.geekinthesheets.app/screenshots/02-formulas.png",
+          "https://www.geekinthesheets.app/screenshots/03-cleaning.png",
+          "https://www.geekinthesheets.app/screenshots/04-undo.png",
+          "https://www.geekinthesheets.app/screenshots/05-byok.png"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free to install with 50 free credits; credit packs from $1.99."
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Rex Labs Inc"
+        }
+      }
+    </script>
+
+    <Fragment
+      set:html={`<script type="application/ld+json">${JSON.stringify(faqJsonLd)}</script>`}
+    />
+
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ── Hero ────────────────────────────────────── */
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 2rem 2rem;
+        width: 100%;
+        max-width: 760px;
+      }
+
+      .logo {
+        width: 220px;
+        height: auto;
+        margin-bottom: 1.25rem;
+      }
+
+      .brand-display {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #2e7d32;
+        letter-spacing: -0.3px;
+        margin-bottom: 0.25rem;
+      }
+
+      .brand-display span {
+        color: #f4b400;
+      }
+
+      .divider {
+        width: 48px;
+        height: 4px;
+        background-color: #f4b400;
+        border-radius: 2px;
+        margin: 1.25rem auto;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        color: #2e7d32;
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+        line-height: 1.2;
+      }
+
+      .tagline {
+        font-size: 1.15rem;
+        color: #444;
+        max-width: 560px;
+        line-height: 1.6;
+      }
+
+      .cta-button {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 0.75rem 1.75rem;
+        background-color: #2e7d32;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+      }
+
+      .cta-button:hover {
+        background-color: #1b5e20;
+      }
+
+      .hero-screenshot {
+        width: 100%;
+        max-width: 960px;
+        padding: 2rem 2rem 3rem;
+      }
+
+      .hero-screenshot img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      }
+
+      /* ── Shared section ──────────────────────────── */
+
+      .section {
+        width: 100%;
+        max-width: 960px;
+        padding: 3rem 2rem;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+        color: #2e7d32;
+        margin-bottom: 1.75rem;
+        letter-spacing: -0.5px;
+        text-align: center;
+      }
+
+      .section-screenshot {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      }
+
+      /* ── Use cases ───────────────────────────────── */
+
+      .use-cases-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        list-style: none;
+      }
+
+      .use-case-item {
+        background: #fff;
+        border-radius: 8px;
+        padding: 0.875rem 1rem 0.875rem 1.125rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        font-size: 0.95rem;
+        line-height: 1.45;
+        border-left: 3px solid #f4b400;
+      }
+
+      /* ── How it works ────────────────────────────── */
+
+      .how-it-works-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .steps {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .step {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .step-number {
+        flex-shrink: 0;
+        width: 2rem;
+        height: 2rem;
+        background: #2e7d32;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+
+      .step-text {
+        line-height: 1.55;
+        padding-top: 0.2rem;
+        font-size: 0.95rem;
+        color: #333;
+      }
+
+      /* ── Trust / undo ────────────────────────────── */
+
+      .trust-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        align-items: start;
+      }
+
+      .trust-text h3 {
+        color: #2e7d32;
+        font-size: 1.1rem;
+        margin-bottom: 0.6rem;
+        margin-top: 1.5rem;
+      }
+
+      .trust-text h3:first-child {
+        margin-top: 0;
+      }
+
+      .trust-text p {
+        color: #444;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin-bottom: 0.375rem;
+      }
+
+      .privacy-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        margin-top: 0.25rem;
+      }
+
+      .privacy-list li {
+        display: flex;
+        gap: 0.625rem;
+        align-items: flex-start;
+        line-height: 1.5;
+        font-size: 0.95rem;
+        color: #333;
+      }
+
+      .privacy-list li::before {
+        content: "\2713";
+        color: #2e7d32;
+        font-weight: bold;
+        flex-shrink: 0;
+        margin-top: 0.05rem;
+      }
+
+      .trust-screenshots {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      /* ── Pricing ─────────────────────────────────── */
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        align-items: stretch;
+      }
+
+      .pricing-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 1.75rem 1.5rem;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        border: 2px solid transparent;
+      }
+
+      .pricing-card.featured {
+        border-color: #2e7d32;
+      }
+
+      .pricing-card h3 {
+        color: #2e7d32;
+        font-size: 1.1rem;
+        margin-bottom: 0.375rem;
+      }
+
+      .price-tag {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1a1a1a;
+        margin: 0.375rem 0 0.25rem;
+        line-height: 1.1;
+      }
+
+      .price-period {
+        font-size: 1rem;
+        font-weight: normal;
+        color: #666;
+      }
+
+      .price-note {
+        font-size: 0.8rem;
+        color: #888;
+        margin-bottom: 1.25rem;
+        line-height: 1.45;
+      }
+
+      .card-features {
+        list-style: none;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .card-features li {
+        font-size: 0.9rem;
+        color: #333;
+        line-height: 1.45;
+        padding-left: 1.25rem;
+        position: relative;
+      }
+
+      .card-features li::before {
+        content: "\2713";
+        position: absolute;
+        left: 0;
+        color: #2e7d32;
+        font-weight: bold;
+      }
+
+      .pack-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        flex: 1;
+        margin-bottom: 1.5rem;
+      }
+
+      .pack-table tr {
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .pack-table tr:last-child {
+        border-bottom: none;
+      }
+
+      .pack-table td {
+        padding: 0.4rem 0;
+        color: #333;
+        vertical-align: top;
+      }
+
+      .pack-table td:last-child {
+        text-align: right;
+        font-weight: bold;
+        color: #1a1a1a;
+        white-space: nowrap;
+        padding-left: 0.5rem;
+      }
+
+      .pricing-card .cta-button {
+        margin-top: auto;
+        text-align: center;
+      }
+
+      .byok-screenshot-wrap {
+        margin-top: 2rem;
+        text-align: center;
+      }
+
+      .byok-screenshot-wrap img {
+        max-width: 640px;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      }
+
+      .byok-caption {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.75rem;
+      }
+
+      /* ── FAQ ─────────────────────────────────────── */
+
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .faq-item {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+      }
+
+      .faq-item summary {
+        padding: 1rem 1.25rem;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 0.95rem;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        color: #1a1a1a;
+      }
+
+      .faq-item summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .faq-item summary::after {
+        content: "+";
+        color: #2e7d32;
+        font-size: 1.25rem;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .faq-item[open] summary::after {
+        content: "\2212";
+      }
+
+      .faq-answer {
+        padding: 0 1.25rem 1rem;
+        color: #444;
+        line-height: 1.65;
+        font-size: 0.9rem;
+      }
+
+      /* ── Closing CTA ─────────────────────────────── */
+
+      .closing-cta {
+        padding: 3rem 2rem 4rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .closing-cta p {
+        color: #444;
+        font-size: 1.05rem;
+        max-width: 480px;
+        line-height: 1.6;
+      }
+
+      /* ── Responsive ──────────────────────────────── */
+
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 1.75rem;
+        }
+
+        .brand-display {
+          font-size: 1.35rem;
+        }
+
+        .section-title {
+          font-size: 1.4rem;
+        }
+
+        .use-cases-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .how-it-works-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .trust-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </Fragment>
+
+  <main>
+    <!-- 1. Hero -->
+    <section class="hero">
+      <img
+        src="geek_in_the_sheets.png"
+        alt="Geek in the Sheets logo"
+        class="logo"
+      />
+      <p class="brand-display">Geek in the <span>Sheets</span></p>
+      <div class="divider"></div>
+      <h1>Your Google Sheet, on autopilot</h1>
+      <p class="tagline">
+        The AI assistant for Google Sheets™. Tell the Geek what you want in
+        plain English — it reads and edits your spreadsheet for you.
+      </p>
+      <a
+        href={INSTALL_URL}
+        class="cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Install now — free</a>
+    </section>
+
+    <div class="hero-screenshot">
+      <img
+        src="screenshots/01-chat.png"
+        alt="Geek in the Sheets AI chat sidebar responding to a plain-English request and editing a Google Sheets spreadsheet in real time"
+        width="1280"
+        height="800"
+      />
+    </div>
+
+    <!-- 2. Use cases -->
+    <section class="section">
+      <h2 class="section-title">Things people use it for</h2>
+      <ul class="use-cases-grid">
+        {useCases.map((item) => <li class="use-case-item">{item}</li>)}
+      </ul>
+    </section>
+
+    <!-- 3. How it works -->
+    <section class="section">
+      <h2 class="section-title">How it works</h2>
+      <div class="how-it-works-layout">
+        <ol class="steps">
+          <li class="step">
+            <span class="step-number">1</span>
+            <span class="step-text"
+              >Install free from the Google Workspace™ Marketplace.</span
+            >
+          </li>
+          <li class="step">
+            <span class="step-number">2</span>
+            <span class="step-text"
+              >Open any spreadsheet and launch it from the Extensions menu.</span
+            >
+          </li>
+          <li class="step">
+            <span class="step-number">3</span>
+            <span class="step-text"
+              >Grant access — to that spreadsheet only.</span
+            >
+          </li>
+          <li class="step">
+            <span class="step-number">4</span>
+            <span class="step-text"
+              >Ask for what you want in plain English; watch the sheet
+              update.</span
+            >
+          </li>
+        </ol>
+        <div>
+          <img
+            src="screenshots/02-formulas.png"
+            alt="The Geek in the Sheets sidebar writing a VLOOKUP formula, explaining each argument, and inserting it directly into the active cell"
+            class="section-screenshot"
+            width="1280"
+            height="800"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Experiment fearlessly -->
+    <section class="section">
+      <h2 class="section-title">Experiment fearlessly</h2>
+      <div class="trust-layout">
+        <div class="trust-text">
+          <h3>One-click Undo</h3>
+          <p>
+            Before every AI change, a snapshot is taken. One-click Undo
+            restores your sheet to before the last change — so you can ask
+            the Geek to try something, see what it does, and roll back
+            instantly if it is not what you wanted.
+          </p>
+
+          <h3>Private by design</h3>
+          <ul class="privacy-list">
+            <li>
+              Accesses only the spreadsheet it is opened in — it cannot see
+              the rest of your Google Drive™ or any other files.
+            </li>
+            <li>
+              Uses your email address for sign-in only.
+            </li>
+            <li>
+              Your Anthropic API key is never stored on our servers — it is
+              passed along with each request only.
+            </li>
+          </ul>
+        </div>
+        <div class="trust-screenshots">
+          <img
+            src="screenshots/04-undo.png"
+            alt="One-click Undo button inside Geek in the Sheets restoring a Google Sheets spreadsheet to its state before the last AI change"
+            class="section-screenshot"
+            width="1280"
+            height="800"
+            loading="lazy"
+          />
+          <img
+            src="screenshots/03-cleaning.png"
+            alt="Messy spreadsheet data cleaned in one pass: whitespace trimmed, capitalization fixed, names split into first and last columns"
+            class="section-screenshot"
+            width="1280"
+            height="800"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Pricing -->
+    <section class="section">
+      <h2 class="section-title">Pick a plan</h2>
+      <div class="pricing-grid">
+
+        <!-- Free -->
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price-tag">$0</div>
+          <p class="price-note">No card required</p>
+          <ul class="card-features">
+            <li>50 free credits on install</li>
+            <li>10 trial messages to test your own API key</li>
+            <li>Powered by Claude Sonnet</li>
+          </ul>
+          <a
+            href={INSTALL_URL}
+            class="cta-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Install now — free</a>
+        </div>
+
+        <!-- Credit packs -->
+        <div class="pricing-card featured">
+          <h3>Credit Packs</h3>
+          <div class="price-tag">from $1.99</div>
+          <p class="price-note">One-time purchase &middot; No subscription</p>
+          <table class="pack-table">
+            <tbody>
+              <tr><td>Starter — 100 credits</td><td>$1.99</td></tr>
+              <tr><td>Popular — 300 credits</td><td>$4.99</td></tr>
+              <tr><td>Power — 1,000 credits</td><td>$14.99</td></tr>
+              <tr><td>Max — 3,000 credits</td><td>$39.99</td></tr>
+            </tbody>
+          </table>
+          <p class="price-note">
+            1 credit = $0.01. A typical request uses a few. Buy inside the
+            add-on after install.
+          </p>
+          <a
+            href={INSTALL_URL}
+            class="cta-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Install now — free</a>
+        </div>
+
+        <!-- Premium BYOK -->
+        <div class="pricing-card">
+          <h3>Premium (BYOK)</h3>
+          <div class="price-tag">$2.99<span class="price-period">/mo</span></div>
+          <p class="price-note">Bring your own Anthropic API key</p>
+          <ul class="card-features">
+            <li>Unlimited use with your own API key</li>
+            <li>Your key is never stored on our servers</li>
+            <li>Choose your model: Sonnet, Haiku, or Opus</li>
+          </ul>
+          <a
+            href={INSTALL_URL}
+            class="cta-button"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Install now — free</a>
+        </div>
+
+      </div>
+
+      <div class="byok-screenshot-wrap">
+        <img
+          src="screenshots/05-byok.png"
+          alt="Geek in the Sheets Premium settings panel for entering an Anthropic API key and selecting a Claude model (Sonnet, Haiku, or Opus)"
+          width="1280"
+          height="800"
+          loading="lazy"
+        />
+        <p class="byok-caption">
+          Premium: bring your own Anthropic API key and pick your model
+        </p>
+      </div>
+    </section>
+
+    <!-- 6. FAQ -->
+    <section class="section">
+      <h2 class="section-title">Frequently asked questions</h2>
+      <div class="faq-list">
+        {
+          faq.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p class="faq-answer">{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 7. Closing CTA -->
+    <section class="closing-cta">
+      <p>
+        Start for free — no card required. Formulas, data cleaning, and
+        one-click Undo, right inside Google Sheets™.
+      </p>
+      <a
+        href={INSTALL_URL}
+        class="cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Get it on the Google Workspace™ Marketplace</a>
+    </section>
+  </main>
+
+  <script is:inline>
+    document.querySelectorAll("a.cta-button").forEach(function (el) {
+      el.addEventListener("click", function () {
+        if (window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({
+            path: "install-click",
+            title: "Install button click",
+            event: true,
+          });
+        }
+      });
+    });
+  </script>
+</Base>

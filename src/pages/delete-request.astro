@@ -1,0 +1,56 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Data Deletion Request | Geek in the Sheets"
+  description="Request deletion of your Geek in the Sheets account data by emailing support@geekinthesheets.app."
+  canonical="https://www.geekinthesheets.app/delete-request/"
+>
+  <Fragment slot="head">
+    <style is:global>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f9f9f9;
+        color: #1a1a1a;
+      }
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        color: #2e7d32;
+        margin-bottom: 1rem;
+      }
+      p {
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.6;
+      }
+      a {
+        color: #2e7d32;
+      }
+    </style>
+  </Fragment>
+
+  <main>
+    <h1>Data Deletion Request</h1>
+    <p>
+      To request deletion of your data, please email us at
+      <a href="mailto:support@geekinthesheets.app">support@geekinthesheets.app</a
+      >.
+    </p>
+  </main>
+</Base>
