@@ -2,6 +2,8 @@
 title: "How to VLOOKUP Between Two Sheets in Google Sheets"
 description: "Pull matching data from another tab (or another spreadsheet file) with VLOOKUP in Google Sheets — the formula explained step by step, plus the common errors and the one-sentence AI shortcut."
 publishDate: 2026-07-07
+related:
+  - remove-extra-spaces-google-sheets
 howToSteps:
   - name: "Identify your search key"
     text: "Decide which value the two sheets have in common — an ID, SKU, name, or email. That's the value VLOOKUP will search for."
