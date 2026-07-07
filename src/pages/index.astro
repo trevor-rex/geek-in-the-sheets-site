@@ -4,17 +4,21 @@ import Base from "../layouts/Base.astro";
 const INSTALL_URL =
   "https://workspace.google.com/marketplace/app/geek_in_the_sheets/372389183907";
 
-const useCases = [
-  "Write a VLOOKUP between two sheets (and have it explained)",
-  "Clean up whitespace and messy text formatting",
-  "Split full names into first and last name columns",
-  "Fix capitalization across a column",
-  "Categorize and tag rows automatically",
-  "Build a category totals table with SUMIF",
-  "Summarize a spreadsheet you didn't build",
-  "Generate sample or placeholder data",
-  "Paste a formula, get a plain-English explanation",
-  "Undo an AI change with one click",
+// href points at the matching tutorial once it's published
+const useCases: { text: string; href?: string }[] = [
+  {
+    text: "Write a VLOOKUP between two sheets (and have it explained)",
+    href: "/tutorials/vlookup-between-two-sheets/",
+  },
+  { text: "Clean up whitespace and messy text formatting" },
+  { text: "Split full names into first and last name columns" },
+  { text: "Fix capitalization across a column" },
+  { text: "Categorize and tag rows automatically" },
+  { text: "Build a category totals table with SUMIF" },
+  { text: "Summarize a spreadsheet you didn't build" },
+  { text: "Generate sample or placeholder data" },
+  { text: "Paste a formula, get a plain-English explanation" },
+  { text: "Undo an AI change with one click" },
 ];
 
 const faq = [
@@ -275,6 +279,15 @@ const faqJsonLd = {
         font-size: 0.95rem;
         line-height: 1.45;
         border-left: 3px solid #f4b400;
+      }
+
+      .use-case-link {
+        color: #2e7d32;
+        text-decoration: none;
+      }
+
+      .use-case-link:hover {
+        text-decoration: underline;
       }
 
       /* ── How it works ────────────────────────────── */
@@ -648,7 +661,19 @@ const faqJsonLd = {
     <section class="section">
       <h2 class="section-title">Things people use it for</h2>
       <ul class="use-cases-grid">
-        {useCases.map((item) => <li class="use-case-item">{item}</li>)}
+        {
+          useCases.map((item) => (
+            <li class="use-case-item">
+              {item.href ? (
+                <a class="use-case-link" href={item.href}>
+                  {item.text}
+                </a>
+              ) : (
+                item.text
+              )}
+            </li>
+          ))
+        }
       </ul>
     </section>
 
@@ -856,18 +881,4 @@ const faqJsonLd = {
       >Get it on the Google Workspace™ Marketplace</a>
     </section>
   </main>
-
-  <script is:inline>
-    document.querySelectorAll("a.cta-button").forEach(function (el) {
-      el.addEventListener("click", function () {
-        if (window.goatcounter && window.goatcounter.count) {
-          window.goatcounter.count({
-            path: "install-click",
-            title: "Install button click",
-            event: true,
-          });
-        }
-      });
-    });
-  </script>
 </Base>

@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from "astro:content";
+import Tutorial from "../../layouts/Tutorial.astro";
+
+export async function getStaticPaths() {
+  const tutorials = await getCollection(
+    "tutorials",
+    ({ data }) => !(data.draft && import.meta.env.PROD),
+  );
+  return tutorials.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry, all: tutorials },
+  }));
+}
+
+const { entry, all } = Astro.props;
+const { Content } = await render(entry);
+
+const relatedEntries = entry.data.related
+  .map((slug) => all.find((t) => t.id === slug))
+  .filter((t) => t !== undefined);
+---
+
+<Tutorial {entry} {relatedEntries}>
+  <Content />
+</Tutorial>

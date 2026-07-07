@@ -1,0 +1,128 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+const tutorials = (
+  await getCollection("tutorials", ({ data }) => !(data.draft && import.meta.env.PROD))
+).sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<Base
+  title="Google Sheets Tutorials | Geek in the Sheets"
+  description="Step-by-step Google Sheets tutorials: formulas, data cleaning, and automation — the manual way, plus how to do it in one plain-English request with AI."
+  canonical="https://www.geekinthesheets.app/tutorials/"
+>
+  <Fragment slot="head">
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tutorials-wrap {
+        width: 100%;
+        max-width: 760px;
+        padding: 3rem 1.5rem 4rem;
+        flex: 1;
+      }
+
+      .breadcrumbs {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 2rem;
+      }
+
+      .breadcrumbs a {
+        color: #2e7d32;
+        text-decoration: none;
+      }
+
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: #2e7d32;
+        letter-spacing: -0.5px;
+        margin-bottom: 0.75rem;
+      }
+
+      .intro {
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      .tutorial-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .tutorial-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        border-left: 3px solid #f4b400;
+        padding: 1.125rem 1.375rem;
+      }
+
+      .tutorial-card a {
+        color: #2e7d32;
+        font-weight: bold;
+        font-size: 1.05rem;
+        text-decoration: none;
+      }
+
+      .tutorial-card a:hover {
+        text-decoration: underline;
+      }
+
+      .tutorial-card p {
+        color: #444;
+        line-height: 1.55;
+        font-size: 0.925rem;
+        margin-top: 0.375rem;
+      }
+    </style>
+  </Fragment>
+
+  <main class="tutorials-wrap">
+    <nav class="breadcrumbs">
+      <a href="/">Geek in the Sheets</a> › Tutorials
+    </nav>
+
+    <h1>Google Sheets Tutorials</h1>
+    <p class="intro">
+      Step-by-step guides to common Google Sheets™ tasks — the manual way
+      first, then how to do the same thing in one plain-English request with
+      Geek in the Sheets.
+    </p>
+
+    <ul class="tutorial-list">
+      {
+        tutorials.map((t) => (
+          <li class="tutorial-card">
+            <a href={`/tutorials/${t.id}/`}>{t.data.title}</a>
+            <p>{t.data.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Base>

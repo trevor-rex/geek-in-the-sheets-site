@@ -1,0 +1,337 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Base from "./Base.astro";
+
+interface Props {
+  entry: CollectionEntry<"tutorials">;
+  relatedEntries: CollectionEntry<"tutorials">[];
+}
+
+const { entry, relatedEntries } = Astro.props;
+const { title, description, publishDate, updatedDate, howToSteps } =
+  entry.data;
+
+const INSTALL_URL =
+  "https://workspace.google.com/marketplace/app/geek_in_the_sheets/372389183907";
+const canonical = `https://www.geekinthesheets.app/tutorials/${entry.id}/`;
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  datePublished: publishDate.toISOString().slice(0, 10),
+  ...(updatedDate && { dateModified: updatedDate.toISOString().slice(0, 10) }),
+  author: { "@type": "Organization", name: "Geek in the Sheets" },
+  publisher: { "@type": "Organization", name: "Rex Labs Inc" },
+  mainEntityOfPage: canonical,
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Geek in the Sheets",
+      item: "https://www.geekinthesheets.app/",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Tutorials",
+      item: "https://www.geekinthesheets.app/tutorials/",
+    },
+    { "@type": "ListItem", position: 3, name: title, item: canonical },
+  ],
+};
+
+const howToJsonLd = howToSteps && {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: title,
+  description,
+  step: howToSteps.map((s, i) => ({
+    "@type": "HowToStep",
+    position: i + 1,
+    name: s.name,
+    text: s.text,
+  })),
+};
+---
+
+<Base title={`${title} | Geek in the Sheets`} {description} {canonical}>
+  <Fragment slot="head">
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Geek in the Sheets" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta
+      property="og:image"
+      content="https://www.geekinthesheets.app/screenshots/01-chat.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta
+      name="twitter:image"
+      content="https://www.geekinthesheets.app/screenshots/01-chat.png"
+    />
+    <Fragment
+      set:html={`<script type="application/ld+json">${JSON.stringify(articleJsonLd)}</script>`}
+    />
+    <Fragment
+      set:html={`<script type="application/ld+json">${JSON.stringify(breadcrumbJsonLd)}</script>`}
+    />
+    {
+      howToJsonLd && (
+        <Fragment
+          set:html={`<script type="application/ld+json">${JSON.stringify(howToJsonLd)}</script>`}
+        />
+      )
+    }
+    <style is:global>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tutorial-wrap {
+        width: 100%;
+        max-width: 760px;
+        padding: 2.5rem 1.5rem 4rem;
+        flex: 1;
+      }
+
+      .breadcrumbs {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 2rem;
+      }
+
+      .breadcrumbs a {
+        color: #2e7d32;
+        text-decoration: none;
+      }
+
+      .breadcrumbs a:hover {
+        text-decoration: underline;
+      }
+
+      .tutorial-wrap h1 {
+        font-size: 2rem;
+        color: #2e7d32;
+        letter-spacing: -0.5px;
+        line-height: 1.25;
+        margin-bottom: 0.75rem;
+      }
+
+      .tutorial-meta {
+        font-size: 0.85rem;
+        color: #888;
+        margin-bottom: 2rem;
+      }
+
+      .tutorial-body h2 {
+        font-size: 1.4rem;
+        color: #2e7d32;
+        letter-spacing: -0.3px;
+        margin: 2.25rem 0 0.875rem;
+      }
+
+      .tutorial-body h3 {
+        font-size: 1.1rem;
+        color: #1a1a1a;
+        margin: 1.75rem 0 0.625rem;
+      }
+
+      .tutorial-body p,
+      .tutorial-body li {
+        line-height: 1.7;
+        color: #333;
+        font-size: 1rem;
+      }
+
+      .tutorial-body p {
+        margin-bottom: 1rem;
+      }
+
+      .tutorial-body ul,
+      .tutorial-body ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .tutorial-body li {
+        margin-bottom: 0.375rem;
+      }
+
+      .tutorial-body code {
+        background: #eef3ee;
+        border-radius: 4px;
+        padding: 0.1rem 0.35rem;
+        font-family: Menlo, Consolas, monospace;
+        font-size: 0.875em;
+        color: #1b5e20;
+      }
+
+      .tutorial-body pre {
+        background: #eef3ee;
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        overflow-x: auto;
+        margin-bottom: 1rem;
+      }
+
+      .tutorial-body pre code {
+        background: none;
+        padding: 0;
+      }
+
+      .tutorial-body img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+        margin: 0.5rem 0 1rem;
+      }
+
+      .tutorial-body table {
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+        width: 100%;
+        font-size: 0.95rem;
+      }
+
+      .tutorial-body th,
+      .tutorial-body td {
+        border: 1px solid #ddd;
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        line-height: 1.5;
+      }
+
+      .tutorial-body th {
+        background: #eef3ee;
+        color: #1b5e20;
+      }
+
+      .tutorial-cta {
+        margin-top: 3rem;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        border-left: 4px solid #f4b400;
+        padding: 1.5rem 1.75rem;
+        text-align: center;
+      }
+
+      .tutorial-cta p {
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 0.75rem 1.75rem;
+        background-color: #2e7d32;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+      }
+
+      .cta-button:hover {
+        background-color: #1b5e20;
+      }
+
+      .related {
+        margin-top: 2.5rem;
+      }
+
+      .related h2 {
+        font-size: 1.15rem;
+        color: #2e7d32;
+        margin-bottom: 0.75rem;
+      }
+
+      .related a {
+        color: #2e7d32;
+      }
+
+      .related li {
+        line-height: 1.7;
+      }
+    </style>
+  </Fragment>
+
+  <main class="tutorial-wrap">
+    <nav class="breadcrumbs">
+      <a href="/">Geek in the Sheets</a> › <a href="/tutorials/">Tutorials</a>
+    </nav>
+
+    <article>
+      <h1>{title}</h1>
+      <p class="tutorial-meta">
+        Updated {(updatedDate ?? publishDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        })}
+      </p>
+
+      <div class="tutorial-body">
+        <slot />
+      </div>
+    </article>
+
+    <div class="tutorial-cta">
+      <p>
+        Or skip the formula wrangling: Geek in the Sheets is an AI assistant
+        for Google Sheets™ — tell it what you want in plain English and it
+        does this for you, right in your spreadsheet. 50 free credits, no card
+        required.
+      </p>
+      <a
+        href={INSTALL_URL}
+        class="cta-button"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Install free from the Marketplace</a>
+    </div>
+
+    {
+      relatedEntries.length > 0 && (
+        <aside class="related">
+          <h2>Related tutorials</h2>
+          <ul>
+            {relatedEntries.map((r) => (
+              <li>
+                <a href={`/tutorials/${r.id}/`}>{r.data.title}</a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
+  </main>
+</Base>
